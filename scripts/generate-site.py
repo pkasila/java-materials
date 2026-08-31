@@ -11,6 +11,35 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 LECTURES_DIR = REPO_ROOT / "lectures"
 SITE_DIR = REPO_ROOT / "_site"
 
+SITE = {
+    "lang": "ru",
+    "title": "Учебные материалы — Java",
+    "tagline": "Презентации к лекциям курса. Собраны из LaTeX Beamer и публикуются в PDF.",
+    "download": "Скачать PDF",
+    "updated": "Обновлено",
+    "lecture_label": "Лекция",
+    "empty": "Пока нет опубликованных презентаций.",
+    "count_one": "{} лекция",
+    "count_few": "{} лекции",
+    "count_many": "{} лекций",
+}
+
+MONTHS_RU = (
+    "",
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
+)
+
 
 def parse_meta(path: Path) -> dict[str, str]:
     data: dict[str, str] = {}
@@ -36,6 +65,34 @@ def lecture_sort_key(slug: str) -> tuple:
     return (num, slug)
 
 
+def lecture_number(slug: str) -> str:
+    match = re.match(r"^(\d+)", slug)
+    return match.group(1).lstrip("0") or match.group(1) if match else ""
+
+
+def format_date_ru(iso_date: str) -> str:
+    match = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", iso_date.strip())
+    if not match:
+        return iso_date
+    year, month, day = match.groups()
+    month_idx = int(month)
+    if not 1 <= month_idx <= 12:
+        return iso_date
+    return f"{int(day)} {MONTHS_RU[month_idx]} {year}"
+
+
+def plural_lectures(count: int) -> str:
+    n = abs(count) % 100
+    n1 = n % 10
+    if 11 <= n <= 19:
+        return SITE["count_many"].format(count)
+    if n1 == 1:
+        return SITE["count_one"].format(count)
+    if 2 <= n1 <= 4:
+        return SITE["count_few"].format(count)
+    return SITE["count_many"].format(count)
+
+
 def discover_lectures() -> list[dict]:
     entries: list[dict] = []
     for lecture_dir in sorted(LECTURES_DIR.iterdir()):
@@ -59,9 +116,11 @@ def discover_lectures() -> list[dict]:
         entries.append(
             {
                 "slug": slug,
+                "number": lecture_number(slug),
                 "title": meta.get("title", slug),
                 "subtitle": meta.get("subtitle", ""),
                 "date": meta.get("date", ""),
+                "date_display": format_date_ru(meta.get("date", "")),
                 "description": meta.get("description", ""),
                 "pdf": f"pdfs/{slug}.pdf",
                 "thumb": f"thumbs/{slug}.png" if thumb.exists() else "",
@@ -74,14 +133,20 @@ def discover_lectures() -> list[dict]:
 def render_card(entry: dict) -> str:
     title = html.escape(entry["title"])
     subtitle = html.escape(entry["subtitle"])
-    date = html.escape(entry["date"])
+    date_display = html.escape(entry["date_display"])
     description = html.escape(entry["description"])
     pdf = html.escape(entry["pdf"])
+    lecture_no = html.escape(entry["number"])
+    thumb_alt = html.escape(f"{SITE['lecture_label']} {entry['number']}: {entry['title']}")
 
     thumb_html = ""
     if entry["thumb"]:
         thumb = html.escape(entry["thumb"])
-        thumb_html = f'<img class="card-thumb" src="{thumb}" alt="">'
+        thumb_html = f'<img class="card-thumb" src="{thumb}" alt="{thumb_alt}">'
+
+    badge_html = ""
+    if lecture_no:
+        badge_html = f'<span class="card-badge">{SITE["lecture_label"]} {lecture_no}</span>'
 
     subtitle_html = f'<p class="card-subtitle">{subtitle}</p>' if subtitle else ""
     desc_html = f'<p class="card-desc">{description}</p>' if description else ""
@@ -91,11 +156,12 @@ def render_card(entry: dict) -> str:
       <a class="card-link" href="{pdf}">
         {thumb_html}
         <div class="card-body">
+          {badge_html}
           <h2 class="card-title">{title}</h2>
           {subtitle_html}
-          <p class="card-date">{date}</p>
           {desc_html}
-          <span class="card-action">Download PDF</span>
+          <p class="card-meta"><span class="card-date-label">{SITE["updated"]}:</span> {date_display}</p>
+          <span class="card-action">{SITE["download"]}</span>
         </div>
       </a>
     </article>"""
@@ -104,14 +170,18 @@ def render_card(entry: dict) -> str:
 def render_index(entries: list[dict]) -> str:
     cards = "\n".join(render_card(e) for e in entries)
     if not cards.strip():
-        cards = '<p class="empty">No presentations built yet.</p>'
+        cards = f'<p class="empty">{SITE["empty"]}</p>'
+
+    count_html = ""
+    if entries:
+        count_html = f'<p class="site-count">{html.escape(plural_lectures(len(entries)))}</p>'
 
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="{SITE["lang"]}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Presentations</title>
+  <title>{html.escape(SITE["title"])}</title>
   <style>
     :root {{
       --ac-dark: #172a4a;
@@ -123,24 +193,36 @@ def render_index(entries: list[dict]) -> str:
     * {{ box-sizing: border-box; }}
     body {{
       margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
       background: var(--ac-light);
       color: #222;
-      line-height: 1.5;
+      line-height: 1.55;
     }}
     header {{
       background: #fff;
       border-bottom: 1px solid var(--ac-rule);
       padding: 2rem 1.5rem;
     }}
+    .header-inner {{
+      max-width: 1100px;
+      margin: 0 auto;
+    }}
     header h1 {{
       margin: 0;
       color: var(--ac-dark);
-      font-size: 1.75rem;
+      font-size: 1.85rem;
+      font-weight: 700;
     }}
     header p {{
-      margin: 0.5rem 0 0;
+      margin: 0.55rem 0 0;
       color: var(--ac-gray);
+      max-width: 42rem;
+    }}
+    .site-count {{
+      margin: 0.75rem 0 0;
+      font-size: 0.9rem;
+      color: var(--ac-mid);
+      font-weight: 600;
     }}
     main {{
       max-width: 1100px;
@@ -149,21 +231,25 @@ def render_index(entries: list[dict]) -> str:
     }}
     .grid {{
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 1.5rem;
     }}
     .card {{
       background: #fff;
       border: 1px solid var(--ac-rule);
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
-      transition: box-shadow 0.15s ease;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
     }}
-    .card:hover {{ box-shadow: 0 4px 16px rgba(23, 42, 74, 0.12); }}
+    .card:hover {{
+      box-shadow: 0 6px 20px rgba(23, 42, 74, 0.12);
+      transform: translateY(-1px);
+    }}
     .card-link {{
       display: block;
       color: inherit;
       text-decoration: none;
+      height: 100%;
     }}
     .card-thumb {{
       width: 100%;
@@ -173,31 +259,46 @@ def render_index(entries: list[dict]) -> str:
       background: var(--ac-light);
       border-bottom: 1px solid var(--ac-rule);
     }}
-    .card-body {{ padding: 1rem 1.1rem 1.2rem; }}
+    .card-body {{ padding: 1rem 1.15rem 1.25rem; }}
+    .card-badge {{
+      display: inline-block;
+      margin-bottom: 0.45rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      background: var(--ac-light);
+      color: var(--ac-mid);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }}
     .card-title {{
       margin: 0;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       color: var(--ac-dark);
+      line-height: 1.3;
     }}
     .card-subtitle {{
-      margin: 0.35rem 0 0;
-      font-size: 0.9rem;
+      margin: 0.4rem 0 0;
+      font-size: 0.92rem;
       color: var(--ac-mid);
     }}
-    .card-date {{
-      margin: 0.5rem 0 0;
+    .card-desc {{
+      margin: 0.65rem 0 0;
+      font-size: 0.9rem;
+      color: #3a3a3a;
+    }}
+    .card-meta {{
+      margin: 0.75rem 0 0;
       font-size: 0.8rem;
       color: var(--ac-gray);
     }}
-    .card-desc {{
-      margin: 0.6rem 0 0;
-      font-size: 0.875rem;
-      color: #444;
+    .card-date-label {{
+      color: var(--ac-gray);
     }}
     .card-action {{
       display: inline-block;
-      margin-top: 0.75rem;
-      font-size: 0.85rem;
+      margin-top: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 600;
       color: var(--ac-mid);
     }}
@@ -206,8 +307,11 @@ def render_index(entries: list[dict]) -> str:
 </head>
 <body>
   <header>
-    <h1>Presentations</h1>
-    <p>LaTeX Beamer decks built from this repository.</p>
+    <div class="header-inner">
+      <h1>{html.escape(SITE["title"])}</h1>
+      <p>{html.escape(SITE["tagline"])}</p>
+      {count_html}
+    </div>
   </header>
   <main>
     <div class="grid">

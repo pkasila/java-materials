@@ -1,6 +1,6 @@
-title: "Introduction to Java"
-subtitle: "Variables, types, and your first program"
+title: "Введение в Java"
+subtitle: "Лекция 1 — первая программа, переменные и типы"
 date: "2026-09-01"
-description: "Starter lecture deck for Java teaching materials"
-lang: en
+description: "Стартовая лекция курса: что такое Java и JVM, структура класса, метод main, примитивные и ссылочные типы. Примеры кода и краткий обзор тем следующих занятий."
+lang: ru
 build: true

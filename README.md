@@ -1,69 +1,40 @@
-# Java Materials — LaTeX Presentations
+# Учебные материалы — Java
 
-Beamer presentations for teaching materials, built with a shared **Academic** theme and published to GitHub Pages as PDFs with a browsable index.
+Здесь публикуются **презентации к лекциям** курса Java: слайды в формате PDF, которые можно просматривать онлайн или скачать.
 
-## Quick start
+## Где смотреть лекции
 
-```bash
-# Copy the template
-cp -R lectures/_template lectures/02-my-topic
+**Сайт с презентациями:** [pkasila.github.io/java-materials](https://pkasila.github.io/java-materials/)
 
-# Edit meta.yaml (set build: true), main.tex, and slides/*
-make lecture DIR=lectures/02-my-topic
+На главной странице — список лекций с описанием, датой и превью первого слайда. Нажмите на карточку или ссылку **«Скачать PDF»**, чтобы открыть или сохранить файл.
 
-# Build all publishable decks and generate the site index
-make
-```
+## Доступные лекции
 
-Requires TeX Live with Cyrillic support for Russian decks (`texlive-lang-cyrillic`), or rely on CI.
+| № | Лекция | О чём |
+| - | ------ | ----- |
+| 1 | [Введение в Java](https://pkasila.github.io/java-materials/pdfs/01-java-intro.pdf) | Что такое Java и JVM, структура класса, метод `main`, примитивные и ссылочные типы. Примеры кода и обзор тем следующих занятий. |
 
-## Repository layout
+Новые лекции появляются на сайте после публикации материалов преподавателем.
 
-| Path | Purpose |
-| ---- | ------- |
-| [`latex/tex/latex/`](latex/tex/latex/) | Beamer theme (`.sty`) and `academicbeamer` package |
-| [`lectures/[NN]-name/`](lectures/) | One folder per presentation |
-| [`scripts/`](scripts/) | Build and site-generation scripts |
-| [`_site/`](_site/) | Generated site (gitignored) |
+## Как пользоваться PDF
 
-See [`lectures/README.md`](lectures/README.md) for naming, `meta.yaml`, and slide modularisation.
+- **На компьютере или планшете** — откройте PDF в браузере или в любом просмотрщике (Preview, Adobe Reader и т.п.).
+- **На телефоне** — скачайте файл и откройте в приложении для PDF; для удобства можно добавить закладку на сайт курса.
+- **Для конспекта** — слайды рассчитаны на формат 16:9; при печати выберите «уместить на странице» или печать нескольких слайдов на лист, если нужен бумажный вариант.
 
-## Theme usage
+## Вопросы по материалам
 
-```latex
-\documentclass[aspectratio=169,11pt,t]{beamer}
-\usepackage[english]{academicbeamer}
-\setshorttitle{Java \textbar\ Lecture 3}
+Если ссылка не открывается, файл не скачивается или вы не нашли нужную лекцию — обратитесь к преподавателю курса.
 
-\title{...}
-\begin{document}
-\input{slides/01-title}
-\end{document}
-```
+---
 
-Use `\usepackage[russian]{academicbeamer}` for Cyrillic content. Helper macros: `\lead{}`, `\tbd{}`, `\photoframe{}{}{}`, `\orient`.
+<details>
+<summary>Для преподавателей и разработчиков</summary>
 
-Images: place files in `assets/` and add `\graphicspath{{assets/}}` in `main.tex`.
+Исходники слайдов — LaTeX Beamer. Сборка и публикация на GitHub Pages:
 
-## Make targets
+- [`lectures/README.md`](lectures/README.md) — как добавить новую лекцию
+- [`latex/README.md`](latex/README.md) — тема оформления
+- `make`, `make lecture DIR=...` — локальная сборка PDF
 
-| Target | Description |
-| ------ | ----------- |
-| `make` / `make all` | Build all decks + generate `_site/index.html` |
-| `make lecture DIR=lectures/01-java-intro` | Build one deck |
-| `make site` | Same as `make all` |
-| `make clean` | Remove aux files, PDFs, and `_site/` |
-
-## GitHub Pages
-
-1. Push to GitHub.
-2. Enable **Settings → Pages → Source: GitHub Actions**.
-3. On push to `main`, [`.github/workflows/presentations.yml`](.github/workflows/presentations.yml) builds PDFs, thumbnails, and deploys `_site/`.
-
-Published URL: `https://<user>.github.io/java-materials/`
-
-## Example decks
-
-- [`lectures/00-ai-olympiad-example/`](lectures/00-ai-olympiad-example/) — full Russian reference deck
-- [`lectures/01-java-intro/`](lectures/01-java-intro/) — short English Java intro
-- [`lectures/_template/`](lectures/_template/) — copy-paste scaffold (not built by CI)
+</details>

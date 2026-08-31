@@ -1,38 +1,29 @@
 \documentclass[aspectratio=169,11pt,t]{beamer}
-% Copy this folder to lectures/NN-topic-name and set build: true in meta.yaml
-\usepackage[english]{academicbeamer}
-\setshorttitle{Course Title \textbar\ Lecture N}
+% Copy this folder to lectures/NN-topic-name and set build: true in meta.yaml.
+% Example slides below demonstrate patterns from the Academic theme;
+% delete or replace files you do not need.
+\usepackage[russian]{academicbeamer}
+\setshorttitle{Название курса~\textbar~Лекция N}
 
 \graphicspath{{assets/}}
 
-\title{Presentation Title}
-\subtitle{Optional subtitle}
-\author{Your Name}
+\title{Название презентации}
+\subtitle{Краткий подзаголовок}
+\author{Автор или кафедра}
 \date{\today}
 
 \begin{document}
 
 \input{slides/01-title}
-\input{slides/02-content}
-
-% Common patterns (uncomment and adapt):
-%
-% \section{Section name}
-%
-% \begin{frame}{Two columns}
-%   \begin{columns}[T]
-%     \begin{column}{0.48\textwidth}
-%       \lead{Left.} Text here.
-%     \end{column}
-%     \begin{column}{0.48\textwidth}
-%       \begin{block}{Block title}
-%         Block body.
-%       \end{block}
-%     \end{column}
-%   \end{columns}
-% \end{frame}
-%
-% \includegraphics[width=\linewidth]{assets/diagram.png}
-% \photoframe{8}{4.5}{Placeholder caption}
+\input{slides/02-outline}
+\input{slides/03-columns-blocks}
+\input{slides/04-goals-blocks}
+\input{slides/05-table-stages}
+\input{slides/06-formula-numbers}
+\input{slides/07-image-placeholder}
+\input{slides/08-responsibilities}
+\input{slides/09-rules-columns}
+\input{slides/10-tech-table}
+\input{slides/11-packages-table}
 
 \end{document}

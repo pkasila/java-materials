@@ -33,6 +33,7 @@ Folders starting with `_` (e.g. `_template`) are excluded from CI builds.
 ```bash
 cp -R lectures/_template lectures/02-my-topic
 # edit meta.yaml (set build: true), main.tex, slides/*
+# remove example slide files you do not need (see _template/slides/README.md)
 make lecture DIR=lectures/02-my-topic
 ```
 

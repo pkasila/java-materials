@@ -1,6 +1,6 @@
-title: "Presentation Title"
-subtitle: "Optional subtitle"
+title: "Название лекции"
+subtitle: "Краткий подзаголовок"
 date: "2026-01-01"
-description: "Replace with a short description for the site index"
-lang: en
+description: "Опишите содержание лекции в 1–2 предложениях: темы, цели занятия, для кого предназначена."
+lang: ru
 build: false
