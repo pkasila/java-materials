@@ -63,3 +63,7 @@ latexmk -pdf main.tex
 ```
 
 Or use `make lecture DIR=lectures/01-project-setup` from the repository root.
+
+## License
+
+The Academic Beamer theme is [MIT](../LICENSE-MIT). See [`../LICENSE`](../LICENSE).

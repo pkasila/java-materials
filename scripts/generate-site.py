@@ -24,6 +24,10 @@ SITE = {
     "count_one": "{} занятие",
     "count_few": "{} занятия",
     "count_many": "{} занятий",
+    "license": "Материалы — CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "repo": "Исходники на GitHub",
+    "repo_url": "https://github.com/pkasila/java-materials",
 }
 
 DEFAULT_TIME_SLOTS = {
@@ -406,6 +410,25 @@ def render_index(entries: list[dict]) -> str:
       text-align: center;
       color: var(--ac-gray);
     }}
+    .site-footer {{
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 0 1.5rem 2.5rem;
+      font-size: 0.85rem;
+      color: var(--ac-gray);
+    }}
+    .site-footer p {{
+      margin: 0;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--ac-rule);
+    }}
+    .site-footer a {{
+      color: var(--ac-mid);
+      text-decoration: none;
+    }}
+    .site-footer a:hover {{
+      text-decoration: underline;
+    }}
     @media (max-width: 640px) {{
       .lecture-link {{
         grid-template-columns: 1fr;
@@ -441,6 +464,13 @@ def render_index(entries: list[dict]) -> str:
       {rows}
     </div>
   </main>
+  <footer class="site-footer">
+    <p>
+      <a href="{html.escape(SITE["license_url"])}">{html.escape(SITE["license"])}</a>
+      ·
+      <a href="{html.escape(SITE["repo_url"])}">{html.escape(SITE["repo"])}</a>
+    </p>
+  </footer>
 </body>
 </html>
 """

@@ -49,3 +49,7 @@ Load the shared theme in `main.tex`:
 ```
 
 See [`../latex/README.md`](../latex/README.md) for package options and customization.
+
+## License
+
+Lecture slides, metadata, and assets are [CC BY 4.0](../LICENSE-CC-BY-4.0). See [`../LICENSE`](../LICENSE).

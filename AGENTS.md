@@ -41,6 +41,7 @@ _site/                      # Generated site (gitignored)
 - **Skip CI:** folders named `_…` or `meta.yaml` with `build: false`.
 - **Hide from index:** `hidden: true` in `meta.yaml` (PDF still builds if `build: true`).
 - **Generated artifacts:** never commit `main.pdf`, LaTeX aux files, or `_site/`.
+- **Licensing:** path-based dual license — `lectures/` and student `README.md` are CC BY 4.0; `latex/`, `scripts/`, `Makefile`, and CI are MIT. See [`LICENSE`](LICENSE).
 
 ## Basic workflows
 
