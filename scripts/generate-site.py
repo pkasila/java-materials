@@ -13,16 +13,24 @@ SITE_DIR = REPO_ROOT / "_site"
 
 SITE = {
     "lang": "ru",
-    "title": "Учебные материалы — Java",
-    "tagline": "Презентации к лекциям курса. Собраны из LaTeX Beamer и публикуются в PDF.",
+    "title": "Промышленное программирование",
+    "subtitle": "Учебные материалы",
+    "page_title": "Промышленное программирование — учебные материалы",
+    "tagline": "Презентации к занятиям курса Java. PDF для просмотра и конспекта.",
     "download": "Скачать PDF",
-    "updated": "Обновлено",
-    "lecture_label": "Лекция",
-    "empty": "Пока нет опубликованных презентаций.",
-    "count_one": "{} лекция",
-    "count_few": "{} лекции",
-    "count_many": "{} лекций",
+    "scheduled": "Проведение",
+    "session_label": "Занятие",
+    "empty": "Пока нет опубликованных материалов.",
+    "count_one": "{} занятие",
+    "count_few": "{} занятия",
+    "count_many": "{} занятий",
 }
+
+DEFAULT_TIME_SLOTS = {
+    "1": "11:25–12:50",
+    "2": "13:15–14:40",
+}
+DEFAULT_SLOT = "1"
 
 MONTHS_RU = (
     "",
@@ -81,7 +89,25 @@ def format_date_ru(iso_date: str) -> str:
     return f"{int(day)} {MONTHS_RU[month_idx]} {year}"
 
 
-def plural_lectures(count: int) -> str:
+def resolve_time(meta: dict[str, str]) -> str:
+    explicit = meta.get("time", "").strip()
+    if explicit:
+        return explicit
+    slot = meta.get("slot", DEFAULT_SLOT).strip() or DEFAULT_SLOT
+    return DEFAULT_TIME_SLOTS.get(slot, DEFAULT_TIME_SLOTS[DEFAULT_SLOT])
+
+
+def format_scheduled_ru(iso_date: str, time: str = "") -> str:
+    date_part = format_date_ru(iso_date)
+    if not date_part:
+        return ""
+    time_part = time.strip()
+    if time_part:
+        return f"{date_part}, {time_part}"
+    return date_part
+
+
+def plural_sessions(count: int) -> str:
     n = abs(count) % 100
     n1 = n % 10
     if 11 <= n <= 19:
@@ -120,7 +146,10 @@ def discover_lectures() -> list[dict]:
                 "title": meta.get("title", slug),
                 "subtitle": meta.get("subtitle", ""),
                 "date": meta.get("date", ""),
-                "date_display": format_date_ru(meta.get("date", "")),
+                "time": resolve_time(meta),
+                "scheduled_display": format_scheduled_ru(
+                    meta.get("date", ""), resolve_time(meta)
+                ),
                 "description": meta.get("description", ""),
                 "pdf": f"pdfs/{slug}.pdf",
                 "thumb": f"thumbs/{slug}.png" if thumb.exists() else "",
@@ -130,58 +159,76 @@ def discover_lectures() -> list[dict]:
     return entries
 
 
-def render_card(entry: dict) -> str:
+def render_lecture_row(entry: dict, index: int) -> str:
     title = html.escape(entry["title"])
     subtitle = html.escape(entry["subtitle"])
-    date_display = html.escape(entry["date_display"])
+    scheduled_display = html.escape(entry["scheduled_display"])
     description = html.escape(entry["description"])
     pdf = html.escape(entry["pdf"])
     lecture_no = html.escape(entry["number"])
-    thumb_alt = html.escape(f"{SITE['lecture_label']} {entry['number']}: {entry['title']}")
+    thumb_alt = html.escape(f"{SITE['session_label']} {entry['number']}: {entry['title']}")
+    aria_label = html.escape(
+        f"{SITE['session_label']} {entry['number']}: {entry['title']} — скачать PDF"
+    )
 
     thumb_html = ""
     if entry["thumb"]:
         thumb = html.escape(entry["thumb"])
-        thumb_html = f'<img class="card-thumb" src="{thumb}" alt="{thumb_alt}">'
+        thumb_html = (
+            f'<div class="lecture-thumb-wrap">'
+            f'<img class="lecture-thumb" src="{thumb}" alt="{thumb_alt}">'
+            f"</div>"
+        )
 
-    badge_html = ""
+    index_html = ""
     if lecture_no:
-        badge_html = f'<span class="card-badge">{SITE["lecture_label"]} {lecture_no}</span>'
+        index_html = f'<p class="lecture-index">{SITE["session_label"]} {lecture_no}</p>'
 
-    subtitle_html = f'<p class="card-subtitle">{subtitle}</p>' if subtitle else ""
-    desc_html = f'<p class="card-desc">{description}</p>' if description else ""
+    subtitle_html = f'<p class="lecture-subtitle">{subtitle}</p>' if subtitle else ""
+    desc_html = f'<p class="lecture-desc">{description}</p>' if description else ""
+    scheduled_html = (
+        f'<p class="lecture-meta"><span class="lecture-meta-label">{SITE["scheduled"]}</span> '
+        f'<time datetime="{html.escape(entry["date"])}">{scheduled_display}</time></p>'
+        if scheduled_display
+        else ""
+    )
 
     return f"""
-    <article class="card">
-      <a class="card-link" href="{pdf}">
+    <article class="lecture" style="--i: {index}">
+      <a class="lecture-link" href="{pdf}" aria-label="{aria_label}">
         {thumb_html}
-        <div class="card-body">
-          {badge_html}
-          <h2 class="card-title">{title}</h2>
+        <div class="lecture-body">
+          {index_html}
+          <h2 class="lecture-title">{title}</h2>
           {subtitle_html}
           {desc_html}
-          <p class="card-meta"><span class="card-date-label">{SITE["updated"]}:</span> {date_display}</p>
-          <span class="card-action">{SITE["download"]}</span>
+          {scheduled_html}
+          <span class="lecture-action">{SITE["download"]}<span class="lecture-arrow" aria-hidden="true">→</span></span>
         </div>
       </a>
     </article>"""
 
 
 def render_index(entries: list[dict]) -> str:
-    cards = "\n".join(render_card(e) for e in entries)
-    if not cards.strip():
-        cards = f'<p class="empty">{SITE["empty"]}</p>'
+    rows = "\n".join(render_lecture_row(e, i) for i, e in enumerate(entries))
+    if not rows.strip():
+        rows = f'<p class="empty">{SITE["empty"]}</p>'
 
     count_html = ""
     if entries:
-        count_html = f'<p class="site-count">{html.escape(plural_lectures(len(entries)))}</p>'
+        count_html = f'<p class="hero-count">{html.escape(plural_sessions(len(entries)))}</p>'
+
+    page_title = html.escape(SITE["page_title"])
+    meta_description = html.escape(SITE["tagline"])
 
     return f"""<!DOCTYPE html>
 <html lang="{SITE["lang"]}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{html.escape(SITE["title"])}</title>
+  <meta name="description" content="{meta_description}">
+  <meta name="theme-color" content="#172a4a">
+  <title>{page_title}</title>
   <style>
     :root {{
       --ac-dark: #172a4a;
@@ -189,6 +236,7 @@ def render_index(entries: list[dict]) -> str:
       --ac-gray: #6c737c;
       --ac-light: #eff1f4;
       --ac-rule: #c6cbd2;
+      --content-width: 1100px;
     }}
     * {{ box-sizing: border-box; }}
     body {{
@@ -198,124 +246,199 @@ def render_index(entries: list[dict]) -> str:
       color: #222;
       line-height: 1.55;
     }}
-    header {{
-      background: #fff;
-      border-bottom: 1px solid var(--ac-rule);
-      padding: 2rem 1.5rem;
+    @keyframes fade-up {{
+      from {{
+        opacity: 0;
+        transform: translateY(12px);
+      }}
+      to {{
+        opacity: 1;
+        transform: translateY(0);
+      }}
     }}
-    .header-inner {{
-      max-width: 1100px;
+    .site-hero {{
+      background: var(--ac-dark);
+      color: #fff;
+      padding: clamp(2.5rem, 8vw, 5rem) 1.5rem;
+    }}
+    .hero-inner {{
+      max-width: var(--content-width);
       margin: 0 auto;
+      animation: fade-up 0.55s ease both;
     }}
-    header h1 {{
+    .hero-brand {{
       margin: 0;
-      color: var(--ac-dark);
-      font-size: 1.85rem;
+      font-size: clamp(1.75rem, 4.5vw, 3rem);
       font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
     }}
-    header p {{
-      margin: 0.55rem 0 0;
-      color: var(--ac-gray);
-      max-width: 42rem;
+    .hero-subtitle {{
+      margin: 0.65rem 0 0;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.82);
     }}
-    .site-count {{
-      margin: 0.75rem 0 0;
+    .hero-tagline {{
+      margin: 1rem 0 0;
+      max-width: 36rem;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.65);
+    }}
+    .hero-count {{
+      margin: 1.25rem 0 0;
       font-size: 0.9rem;
-      color: var(--ac-mid);
       font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.02em;
     }}
     main {{
-      max-width: 1100px;
+      max-width: var(--content-width);
       margin: 0 auto;
-      padding: 2rem 1.5rem 3rem;
+      padding: 0 1.5rem 3.5rem;
     }}
-    .grid {{
+    .lecture-list {{
+      margin-top: 2rem;
+    }}
+    .lecture {{
+      border-bottom: 1px solid var(--ac-rule);
+      animation: fade-up 0.5s ease both;
+      animation-delay: calc(0.08s * var(--i) + 0.15s);
+    }}
+    .lecture-link {{
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: 200px 1fr;
       gap: 1.5rem;
-    }}
-    .card {{
-      background: #fff;
-      border: 1px solid var(--ac-rule);
-      border-radius: 8px;
-      overflow: hidden;
-      transition: box-shadow 0.15s ease, transform 0.15s ease;
-    }}
-    .card:hover {{
-      box-shadow: 0 6px 20px rgba(23, 42, 74, 0.12);
-      transform: translateY(-1px);
-    }}
-    .card-link {{
-      display: block;
+      align-items: start;
+      padding: 1.5rem 0;
       color: inherit;
       text-decoration: none;
-      height: 100%;
+      transition: background 0.15s ease;
     }}
-    .card-thumb {{
+    .lecture-link:hover {{
+      background: rgba(255, 255, 255, 0.45);
+    }}
+    .lecture-link:focus-visible {{
+      outline: 2px solid var(--ac-mid);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }}
+    .lecture-thumb-wrap {{
+      overflow: hidden;
+      border-radius: 2px;
+      background: #fff;
+    }}
+    .lecture-thumb {{
+      display: block;
       width: 100%;
       aspect-ratio: 16 / 9;
       object-fit: cover;
-      display: block;
-      background: var(--ac-light);
-      border-bottom: 1px solid var(--ac-rule);
+      transition: transform 0.25s ease;
     }}
-    .card-body {{ padding: 1rem 1.15rem 1.25rem; }}
-    .card-badge {{
-      display: inline-block;
-      margin-bottom: 0.45rem;
-      padding: 0.15rem 0.55rem;
-      border-radius: 999px;
-      background: var(--ac-light);
-      color: var(--ac-mid);
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
+    .lecture-link:hover .lecture-thumb {{
+      transform: scale(1.03);
     }}
-    .card-title {{
+    .lecture-body {{
+      min-width: 0;
+      padding-top: 0.1rem;
+    }}
+    .lecture-index {{
       margin: 0;
-      font-size: 1.15rem;
-      color: var(--ac-dark);
-      line-height: 1.3;
-    }}
-    .card-subtitle {{
-      margin: 0.4rem 0 0;
-      font-size: 0.92rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
       color: var(--ac-mid);
     }}
-    .card-desc {{
-      margin: 0.65rem 0 0;
-      font-size: 0.9rem;
+    .lecture-title {{
+      margin: 0.35rem 0 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ac-dark);
+      line-height: 1.25;
+    }}
+    .lecture-subtitle {{
+      margin: 0.4rem 0 0;
+      font-size: 0.95rem;
+      color: var(--ac-mid);
+    }}
+    .lecture-desc {{
+      margin: 0.55rem 0 0;
+      font-size: 0.92rem;
       color: #3a3a3a;
+      max-width: 52rem;
     }}
-    .card-meta {{
-      margin: 0.75rem 0 0;
-      font-size: 0.8rem;
+    .lecture-meta {{
+      margin: 0.65rem 0 0;
+      font-size: 0.85rem;
+      color: var(--ac-gray);
+      font-variant-numeric: tabular-nums;
+    }}
+    .lecture-meta-label {{
+      color: var(--ac-mid);
+      font-weight: 600;
+      margin-right: 0.35rem;
+    }}
+    .lecture-meta time {{
       color: var(--ac-gray);
     }}
-    .card-date-label {{
-      color: var(--ac-gray);
-    }}
-    .card-action {{
-      display: inline-block;
+    .lecture-action {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
       margin-top: 0.85rem;
       font-size: 0.88rem;
       font-weight: 600;
       color: var(--ac-mid);
     }}
-    .empty {{ color: var(--ac-gray); }}
+    .lecture-arrow {{
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }}
+    .lecture-link:hover .lecture-arrow {{
+      opacity: 1;
+      transform: translateX(0);
+    }}
+    .empty {{
+      margin: 3rem 0;
+      text-align: center;
+      color: var(--ac-gray);
+    }}
+    @media (max-width: 640px) {{
+      .lecture-link {{
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }}
+    }}
+    @media (prefers-reduced-motion: reduce) {{
+      .hero-inner,
+      .lecture {{
+        animation: none;
+      }}
+      .lecture-thumb,
+      .lecture-arrow {{
+        transition: none;
+      }}
+      .lecture-link:hover .lecture-thumb {{
+        transform: none;
+      }}
+    }}
   </style>
 </head>
 <body>
-  <header>
-    <div class="header-inner">
-      <h1>{html.escape(SITE["title"])}</h1>
-      <p>{html.escape(SITE["tagline"])}</p>
+  <header class="site-hero">
+    <div class="hero-inner">
+      <h1 class="hero-brand">{html.escape(SITE["title"])}</h1>
+      <p class="hero-subtitle">{html.escape(SITE["subtitle"])}</p>
+      <p class="hero-tagline">{html.escape(SITE["tagline"])}</p>
       {count_html}
     </div>
   </header>
   <main>
-    <div class="grid">
-      {cards}
+    <div class="lecture-list">
+      {rows}
     </div>
   </main>
 </body>

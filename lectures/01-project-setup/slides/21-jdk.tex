@@ -1,0 +1,26 @@
+\begin{frame}{JDK}
+  \lead{JDK} --- комплект разработчика: компилятор, стандартная библиотека,
+  инструменты. \lead{JRE} --- только среда выполнения; для курса его недостаточно.
+
+  \medskip
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Что внутри}
+        \begin{itemize}
+          \item \texttt{javac} --- компиляция;
+          \item \texttt{java} --- запуск;
+          \item стандартная библиотека.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Ориентир}
+        \begin{itemize}
+          \item \textbf{JDK 21 LTS};
+          \item toolchain задаём в Gradle, а не \flqq какая Java стоит у меня\frqq;
+          \item IDEA подхватит версию из проекта.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}

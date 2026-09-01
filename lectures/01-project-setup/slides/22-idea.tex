@@ -1,0 +1,25 @@
+\begin{frame}{IntelliJ IDEA}
+  \lead{Основная IDE курса.} Проект открываем как Gradle, а не как \flqq папку с .java\frqq.
+
+  \medskip
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Как открывать}
+        \begin{itemize}
+          \item Open / New Project --- Gradle;
+          \item использовать \textbf{Gradle Wrapper};
+          \item дождаться импорта, затем \texttt{build}.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Не коммитить}
+        \begin{itemize}
+          \item каталог \texttt{.idea/};
+          \item файлы \texttt{*.iml};
+          \item локальные run-конфигурации, если они не общие.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}

@@ -58,8 +58,8 @@ After loading, the **Academic** Beamer theme is active.
 From repo root with `latexmkrc` in place:
 
 ```bash
-cd lectures/01-java-intro
+cd lectures/01-project-setup
 latexmk -pdf main.tex
 ```
 
-Or use `make lecture DIR=lectures/01-java-intro` from the repository root.
+Or use `make lecture DIR=lectures/01-project-setup` from the repository root.

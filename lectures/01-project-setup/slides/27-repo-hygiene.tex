@@ -1,0 +1,31 @@
+\begin{frame}[fragile]{Гигиена репозитория}
+  \vspace{0.1em}
+  \begin{columns}[T]
+    \begin{column}{0.44\textwidth}
+      {\footnotesize\texttt{.gitignore} --- не в Git}
+      \begin{semiverbatim}
+.gradle/
+build/
+.idea/
+*.class
+*.iml
+      \end{semiverbatim}
+      \vspace{0.5em}
+      {\footnotesize\color{acGray}
+      \textbf{Коммитить:} \texttt{gradlew}, \texttt{gradlew.bat},
+      \texttt{gradle/wrapper/}.}
+    \end{column}
+    \begin{column}{0.52\textwidth}
+      \begin{block}{README}
+        \begin{itemize}
+          \item что за проект и какая тематика;
+          \item как собрать: \texttt{./gradlew build};
+          \item какая версия JDK ожидается.
+        \end{itemize}
+      \end{block}
+      \vspace{0.3em}
+      {\footnotesize
+      README читает человек и AI: без него проект --- чёрный ящик.}
+    \end{column}
+  \end{columns}
+\end{frame}

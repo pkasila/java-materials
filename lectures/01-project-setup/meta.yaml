@@ -1,0 +1,7 @@
+title: "Организация индивидуального Java-проекта"
+subtitle: "Репозиторий, Gradle, Project Proposal"
+date: "2026-09-05"
+slot: "1"
+description: "Жизненный цикл ПО; JDK, IntelliJ IDEA, Gradle и Git; AI-friendly разработка и ответственность за результат. Практика: репозиторий, сборка, выбор темы и первичный Project Proposal."
+lang: ru
+build: true

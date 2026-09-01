@@ -1,0 +1,30 @@
+\begin{frame}{Maven: знать в лицо}
+  \lead{В индустрии часто Maven.} На курсе его ставить и сдавать не нужно.
+
+  \medskip
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Что увидите}
+        \begin{itemize}
+          \item файл \texttt{pom.xml} вместо \texttt{build.gradle.kts};
+          \item тот же \texttt{src/main/java};
+          \item фазы: \texttt{compile}, \texttt{test}, \texttt{package}.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Как читать}
+        \begin{itemize}
+          \item координаты: groupId, artifactId, version;
+          \item зависимости --- в XML, не в Kotlin DSL;
+          \item IDEA откроет Maven-проект так же, как Gradle.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.4em}
+  {\footnotesize\color{acGray}
+  Домашнее задание --- только Gradle. Чужой корпоративный репозиторий
+  вы можете встретить уже на Maven.}
+\end{frame}

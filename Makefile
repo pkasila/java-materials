@@ -8,7 +8,7 @@ all: site
 
 lecture:
 ifndef DIR
-	$(error Usage: make lecture DIR=lectures/01-java-intro)
+	$(error Usage: make lecture DIR=lectures/01-project-setup)
 endif
 	$(SCRIPTS)/build-presentation.sh $(DIR)
 

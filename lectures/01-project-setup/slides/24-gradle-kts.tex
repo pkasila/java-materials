@@ -1,0 +1,30 @@
+\begin{frame}[fragile]{Минимальный Gradle Kotlin DSL}
+  \vspace{0.1em}
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      {\footnotesize\texttt{settings.gradle.kts}}
+      \begin{semiverbatim}
+rootProject.name = "task-tracker"
+      \end{semiverbatim}
+      \vspace{0.6em}
+      {\footnotesize\color{acGray}
+      Имя проекта --- осмысленное, по теме, не \texttt{untitled}.}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      {\footnotesize\texttt{build.gradle.kts}}
+      \footnotesize
+      \begin{semiverbatim}
+plugins \{
+    java
+\}
+
+java \{
+    toolchain \{
+        languageVersion.set(
+            JavaLanguageVersion.of(21))
+    \}
+\}
+      \end{semiverbatim}
+    \end{column}
+  \end{columns}
+\end{frame}

@@ -1,0 +1,25 @@
+\begin{frame}{Критерий готовности}
+  \vspace{0.3em}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{Готово, если}
+        \begin{itemize}
+          \item клон с remote собирается без ручных шагов;
+          \item в репозитории нет \texttt{build/} и \texttt{.gradle/};
+          \item README позволяет повторить сборку;
+          \item выбран номер тематики (или согласована своя).
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{block}{Ещё не готово}
+        \begin{itemize}
+          \item проект только локально, без remote;
+          \item wrapper не в Git --- \flqq поставьте Gradle\frqq;
+          \item README из двух слов;
+          \item тема не выбрана, Proposal пустой.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}

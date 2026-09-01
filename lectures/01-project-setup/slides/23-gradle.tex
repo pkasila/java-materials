@@ -1,0 +1,23 @@
+\begin{frame}{Gradle: зачем сборка и wrapper}
+  \lead{Не собирать руками через \texttt{javac}.}
+  Сборка знает исходники, тесты, зависимости и версию JDK.
+
+  \medskip
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}\setlength\itemsep{0.35em}
+        \item layout как у Maven: \texttt{src/main/java}, \texttt{src/test/java};
+        \item \textbf{wrapper} (\texttt{gradlew} / \texttt{gradlew.bat}) ---
+              та же версия Gradle у всех;
+        \item задачи: \texttt{build}, \texttt{test};
+          \texttt{run} --- когда подключите Application plugin.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{block}{Команда успеха}
+        \texttt{./gradlew build}\\[0.4em]
+        {\footnotesize На Windows --- \texttt{gradlew.bat build}.}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}

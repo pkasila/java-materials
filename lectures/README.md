@@ -12,7 +12,7 @@ lectures/02-collections/
 
 ## Naming
 
-Use a numeric prefix for sort order on the site index, e.g. `01-java-intro`, `02-collections`.
+Use a numeric prefix for sort order on the site index, e.g. `01-project-setup`, `02-collections`.
 
 Folders starting with `_` (e.g. `_template`) are excluded from CI builds.
 
@@ -22,7 +22,9 @@ Folders starting with `_` (e.g. `_template`) are excluded from CI builds.
 | ----- | -------- | ------- | ------- |
 | `title` | yes | — | Index page title |
 | `subtitle` | no | — | Card subtitle |
-| `date` | yes | — | Display date (ISO `YYYY-MM-DD`) |
+| `date` | yes | — | Session date (ISO `YYYY-MM-DD`) |
+| `slot` | no | `1` | Time slot: `1` → 11:25–12:50, `2` → 13:15–14:40 |
+| `time` | no | — | Override slot with custom time, e.g. `10:30` or `10:30–12:00` |
 | `description` | no | — | Card blurb |
 | `lang` | no | — | Informational (`ru`, `en`); language is set in `main.tex` |
 | `build` | no | `true` | Set `false` to skip CI/local batch builds |
