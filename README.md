@@ -12,7 +12,7 @@
 
 | № | Лекция | О чём |
 | - | ------ | ----- |
-| 1 | [Организация индивидуального Java-проекта](https://pkasila.github.io/java-materials/pdfs/01-project-setup.pdf) | Жизненный цикл ПО; JDK, IDEA, Gradle и Git; AI-friendly разработка. Личный репозиторий, сборка, выбор темы и первичный Project Proposal. |
+| 1 | [Организация индивидуального Java-проекта](https://pkasila.github.io/java-materials/pdfs/01-project-setup.pdf) | Жизненный цикл ПО; JDK, IDEA, Gradle и Git; три пути проекта и планка положительной оценки. Личный репозиторий, сборка, выбор темы и первичный Project Proposal. |
 | 2 | [Требования, backlog и декомпозиция задачи](https://pkasila.github.io/java-materials/pdfs/02-requirements.pdf) | Functional и non-functional requirements, user story, критерии приёмки, backlog и работа с ИИ. Практика: 10–15 элементов backlog, границы MVP, Markdown и диаграммы. |
 
 Новые лекции появляются на сайте после публикации материалов преподавателем.
