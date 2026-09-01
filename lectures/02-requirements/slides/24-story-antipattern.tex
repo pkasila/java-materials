@@ -1,0 +1,21 @@
+\begin{frame}{Антипаттерны историй}
+  \vspace{0.2em}
+  \small
+  \begin{tabular}{@{}p{0.42\textwidth}p{0.50\textwidth}@{}}
+    \toprule
+    \textbf{Плохо} & \textbf{Почему}\\
+    \midrule
+    Сделать CRUD для всех сущностей
+      & Нет актора и ценности; это план работ, не требование. \\
+    \addlinespace[0.32em]
+    Как пользователь, я хочу систему управления задачами
+      & История = весь продукт. Нельзя принять и нельзя оценить. \\
+    \addlinespace[0.32em]
+    Добавить TaskService и репозиторий
+      & Implementation-таск. Backlog этой недели --- про пользователя. \\
+    \addlinespace[0.32em]
+    Как админ, я хочу удобный интерфейс
+      & Роль не из аудитории; \flqq удобный\frqq{} не проверяется. \\
+    \bottomrule
+  \end{tabular}
+\end{frame}

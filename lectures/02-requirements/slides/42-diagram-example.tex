@@ -1,0 +1,45 @@
+\begin{frame}[fragile]{Образец Mermaid}
+  \lead{Один блок в \texttt{BACKLOG.md}.} Слева исходник, справа --- как его рисуют GitHub и GitLab.
+
+  \vspace{0.25em}
+  \begin{columns}[T]
+    \begin{column}{0.40\textwidth}
+      {\footnotesize\texttt{mermaid}}
+      \footnotesize
+      \begin{semiverbatim}
+flowchart LR
+  Member -\mbox{-}> Tracker
+  Tracker -\mbox{-}> Task
+  Tracker -\mbox{-}> Comment
+      \end{semiverbatim}
+    \end{column}
+    \begin{column}{0.58\textwidth}
+      \centering
+      \begin{tikzpicture}[
+        font=\scriptsize\ttfamily,
+        node distance=5.5mm and 7mm,
+        box/.style={
+          draw=acDark, line width=0.65pt,
+          fill=acLight, text=acDark,
+          rounded corners=2.5pt,
+          inner xsep=5pt, inner ysep=3.5pt,
+          minimum height=1.35em,
+        },
+        arr/.style={-stealth, acMid, line width=0.75pt},
+      ]
+        \node[box] (member) {Member};
+        \node[box, right=of member] (tracker) {Tracker};
+        \node[box, above right=3.2mm and 7mm of tracker] (task) {Task};
+        \node[box, below right=3.2mm and 7mm of tracker] (comment) {Comment};
+        \draw[arr] (member) -- (tracker);
+        \draw[arr] (tracker) -- (task);
+        \draw[arr] (tracker) -- (comment);
+      \end{tikzpicture}
+
+      \vspace{0.45em}
+      {\footnotesize\color{acGray}
+      Участник работает с трекером; задача и комментарий --- внутри системы.\\
+      Имена узлов --- из вашего домена, не \texttt{User1}.}
+    \end{column}
+  \end{columns}
+\end{frame}

@@ -1,0 +1,29 @@
+\section{Артефакты и ИИ}
+
+\begin{frame}[fragile]{Git и Markdown}
+  \lead{Proposal и backlog живут рядом с кодом.} Их читает человек и модель.
+
+  \medskip
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      {\footnotesize Что коммитить}
+      \begin{semiverbatim}
+README.md
+PROPOSAL.md
+BACKLOG.md
+      \end{semiverbatim}
+      \vspace{0.45em}
+      {\footnotesize\color{acGray}
+      Можно \texttt{docs/}, если корень репозитория уже тесный.}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Зачем не в чате}
+        \begin{itemize}
+          \item история изменений в Git;
+          \item преподаватель видит тот же текст;
+          \item ИИ опирается на ваши границы, а не на \flqq типичный трекер\frqq.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}

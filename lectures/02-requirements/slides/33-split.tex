@@ -1,0 +1,25 @@
+\begin{frame}{Как резать историю}
+  \lead{10--15 элементов --- истории MVP, не 50 сгенерированных CRUD-пунктов.}
+
+  \medskip
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{Резать по}
+        \begin{itemize}\setlength\itemsep{0.28em}
+          \item актору (участник vs преподаватель);
+          \item сценарию (счастливый путь, затем отказ);
+          \item данным (одна сущность, не \flqq весь домен\frqq).
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{block}{Не резать на}
+        \begin{itemize}\setlength\itemsep{0.28em}
+          \item \flqq сделать модель\frqq, \flqq сделать UI\frqq, \flqq сделать тесты\frqq;
+          \item слои архитектуры;
+          \item \flqq настроить репозиторий\frqq{} --- это уже лекция~1.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
