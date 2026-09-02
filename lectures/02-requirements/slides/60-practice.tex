@@ -5,11 +5,19 @@
   Репозиторий лекции~1 может ещё дописываться --- Markdown коммитится туда же.
 
   \medskip
-  \begin{enumerate}\setlength\itemsep{0.38em}
+  \footnotesize
+  \begin{enumerate}\setlength\itemsep{0.22em}
     \item Утвердить предметную область: номер темы или согласованная своя.
-    \item Зафиксировать MVP: in / out и 5--7 сущностей (уточнить Proposal).
-    \item 10--15 user story: актор, ценность, AC (хотя бы 2--3 на историю).
-    \item Одна диаграмма Mermaid: акторы и граница системы.
+    \item Зафиксировать MVP: in / out и сущности из Proposal;
+          помнить о семестровой планке 5--7 взаимосвязанных сущностей.
+    \item 10--15 элементов backlog, преимущественно user stories:
+          актор, ценность, AC (хотя бы 2--3 на историю).
+          Истории должны покрывать ключевую сущность,
+          поиск/фильтрацию и минимум два бизнес-правила.
+    \item Полезное дополнение: диаграмма Mermaid с акторами
+          и границей системы.
+    \item Реализацию Spring Boot, PostgreSQL, тестов, Docker, CI
+          и React на этой паре сдавать не требуется.
     \item Файлы в Git: \texttt{PROPOSAL.md} и \texttt{BACKLOG.md}.
   \end{enumerate}
 \end{frame}

@@ -1,20 +1,24 @@
 \begin{frame}{Критерий готовности}
-  \vspace{0.3em}
+  \vspace{0.1em}
+  \scriptsize
   \begin{columns}[T]
     \begin{column}{0.49\textwidth}
       \begin{block}{Готово, если}
-        \begin{itemize}
-          \item в клоне есть Markdown с Proposal и backlog;
-          \item истории про \emph{вашу} проблему, не про абстрактный CRUD;
-          \item MVP короче полного списка: есть Won't / \flqq не в v1\frqq;
-          \item есть диаграмма акторов; у историй есть AC.
+        \begin{itemize}\setlength\itemsep{0.12em}
+          \item Proposal и backlog находятся в Markdown в клоне;
+          \item истории связаны с \emph{вашей} проблемой,
+                а не с абстрактным CRUD;
+          \item есть MVP с явным Won't / \flqq не в v1\frqq;
+          \item backlog покрывает ключевую сущность,
+                поиск/фильтрацию и два бизнес-правила;
+          \item у историй есть AC; диаграмма акторов --- дополнение.
         \end{itemize}
       \end{block}
     \end{column}
     \begin{column}{0.49\textwidth}
       \begin{block}{Ещё не готово}
-        \begin{itemize}
-          \item backlog только в чате или в голове;
+        \begin{itemize}\setlength\itemsep{0.12em}
+          \item backlog только в чате;
           \item одна строка \flqq CRUD всех сущностей\frqq;
           \item 50 пунктов без приоритета и без MVP;
           \item диаграмма классов вместо акторов.

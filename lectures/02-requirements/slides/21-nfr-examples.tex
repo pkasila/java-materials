@@ -6,10 +6,9 @@
     \begin{column}{0.49\textwidth}
       \begin{block}{Подходит}
         \begin{itemize}\setlength\itemsep{0.28em}
-          \item пароль не пишется в лог;
-          \item ошибка валидации видна пользователю;
           \item сборка --- одна команда \texttt{./gradlew build};
-          \item пустое название задачи нельзя сохранить.
+          \item пароли не попадают в лог;
+          \item одинаковый вход даёт одинаковый формат ответа.
         \end{itemize}
       \end{block}
     \end{column}
@@ -19,7 +18,9 @@
           \item \flqq система должна быть удобной\frqq;
           \item uptime 99,9\,\%;
           \item миллион пользователей;
-          \item \flqq промышленный уровень безопасности\frqq.
+          \item \flqq промышленный уровень безопасности\frqq;
+          \item пустое название задачи нельзя сохранить
+                (это FR или бизнес-правило).
         \end{itemize}
       \end{block}
     \end{column}

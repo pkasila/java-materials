@@ -9,17 +9,17 @@
         \begin{itemize}\setlength\itemsep{0.22em}
           \item у задачи ровно один владелец;
           \item владельца можно сменить;
-          \item без владельца нельзя перевести в \flqq в работе\frqq.
+          \item назначенный владелец отображается в карточке задачи.
         \end{itemize}
       \end{block}
     \end{column}
     \begin{column}{0.49\textwidth}
       \begin{block}{Given / When / Then}
         {\small
-        \textbf{Дано} задача без владельца.\\
-        \textbf{Когда} статус меняют на \flqq в работе\frqq.\\
-        \textbf{Тогда} система отказывает
-        и просит назначить владельца.}
+        \textbf{Дано} участник и задача без владельца.\\
+        \textbf{Когда} участник назначает владельца.\\
+        \textbf{Тогда} владелец сохраняется
+        и отображается в карточке задачи.}
       \end{block}
     \end{column}
   \end{columns}
